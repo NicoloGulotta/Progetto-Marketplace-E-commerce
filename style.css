@@ -8,25 +8,3 @@ body {
     font-family: 'Times New Roman', Times, serif;
     background-color: rgb(108, 108, 108);
 }
-
-.card {
-    margin: 10px;
-}
-
-.card-img-top {
-    max-height: 200px;
-    object-fit: cover;
-}
-
-.card-body {
-    padding: 15px;
-}
-
-.card-title {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.card-text {
-    font-size: 1em;
-}
