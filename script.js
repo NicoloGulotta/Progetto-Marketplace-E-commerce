@@ -156,7 +156,7 @@ async function DeleteData(productId) {
 // Funzione principale asincrona per eseguire operazioni
 async function main() {
     try {
-     
+
         // ID dell'elemento da eliminare
         const elementIdToDelete = ""; // Sostituisci con l'ID dell'elemento da eliminare
 
