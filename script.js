@@ -1,6 +1,7 @@
 const apiUrl = "https://striveschool-api.herokuapp.com/api/product/";
 const key = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ0ZGY4NTljNDM3MDAwMTkzYzM2YzciLCJpYXQiOjE3MDg0NDk3NDAsImV4cCI6MTcwOTY1OTM0MH0.xLGvIWN7fzfLPJCNB_5LMbDmJppr4n_vBbQuTXL9LRk";
 
+// Funzione per inviare una richiesta POST e aggiungere un nuovo prodotto
 async function postData(url, data) {
     try {
         const response = await fetch(url, {
@@ -13,7 +14,8 @@ async function postData(url, data) {
         });
 
         if (!response.ok) {
-            throw new Error(`Errore HTTP! Stato: ${response.status}`);
+            const errorMessage = await response.text();
+            throw new Error(`Errore HTTP! Stato: ${response.status}, Messaggio: ${errorMessage}`);
         }
 
         const responseData = await response.json();
@@ -25,6 +27,7 @@ async function postData(url, data) {
     }
 }
 
+// Funzione per inviare una richiesta GET e ottenere i dati dei prodotti
 async function fetchData(url) {
     try {
         const response = await fetch(url, {
@@ -34,7 +37,8 @@ async function fetchData(url) {
         });
 
         if (!response.ok) {
-            throw new Error(`Errore HTTP! Stato: ${response.status}`);
+            const errorMessage = await response.text();
+            throw new Error(`Errore HTTP! Stato: ${response.status}, Messaggio: ${errorMessage}`);
         }
 
         const responseData = await response.json();
@@ -46,7 +50,8 @@ async function fetchData(url) {
     }
 }
 
-function createProductCard(product) {
+// Funzione per creare la card di un prodotto e aggiungerla 
+function CreateCard(product) {
     const cardContainer = document.getElementById('card-container');
 
     const rowDiv = document.createElement('div');
@@ -91,31 +96,76 @@ function createProductCard(product) {
     cardContainer.appendChild(rowDiv);
 }
 
+// Funzione per rendere visibili i prodotti
 async function renderProducts() {
     try {
         const products = await fetchData(apiUrl);
         products.forEach(product => {
-            createProductCard(product);
+            CreateCard(product);
         });
     } catch (error) {
         console.error("Errore durante la richiesta GET:", error);
     }
 }
 
-// Dati del nuovo elemento da inserire
-const newProduct = {
-    name: "Prova con img",
-    description: "Descrizione del Nuovo Prodotto",
-    imageUrl: "https://images.pexels.com/photos/11867612/pexels-photo-11867612.jpeg",
-    price: 99.99,
-};
+// Chiamata alla funzione per rendere visibili i prodotti
+renderProducts();
 
-// Inserisci il nuovo prodotto
-postData(apiUrl, newProduct)
-    .then(() => {
-        // Dopo aver inserito il nuovo prodotto, aggiorna la visualizzazione dei prodotti
-        renderProducts();
-    })
-    .catch(error => {
-        console.error("Errore durante l'inserimento del nuovo elemento:", error);
-    });
+// Funzione per generare un nuovo prodotto 
+async function GeneratePost() {
+    try {
+        const newProduct = {
+            name: "",
+            description: "",
+            imageUrl: "",
+            price: ,
+        };
+
+        await postData(apiUrl, newProduct);
+        await renderProducts();
+    } catch (error) {
+        console.error("Errore durante l'inizializzazione:", error);
+    }
+}
+GeneratePost();
+
+// Funzione per eliminare un prodotto
+async function DeleteData(productId) {
+    const deleteUrl = `${apiUrl}${productId}`;
+
+    try {
+        const response = await fetch(deleteUrl, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': key
+            }
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Errore HTTP! Stato: ${response.status}, Messaggio: ${errorMessage}`);
+        }
+
+        console.log("Elemento eliminato con successo");
+    } catch (error) {
+        console.error("Errore durante la richiesta DELETE:", error);
+        throw error;
+    }
+}
+
+// Funzione principale asincrona per eseguire operazioni
+async function main() {
+    try {
+     
+        // ID dell'elemento da eliminare
+        const elementIdToDelete = ""; // Sostituisci con l'ID dell'elemento da eliminare
+
+        // Tentativo di eliminare un elemento
+        await DeleteData(elementIdToDelete);
+    } catch (error) {
+        console.error("Errore durante l'esecuzione del main:", error);
+    }
+}
+
+// Chiamata alla funzione principale asincrona
+main();
