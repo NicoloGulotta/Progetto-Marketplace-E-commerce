@@ -1,41 +1,33 @@
 const apiUrl = "https://striveschool-api.herokuapp.com/api/product/";
-const key = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ0ZGY4NTljNDM3MDAwMTkzYzM2YzciLCJpYXQiOjE3MDg0NDk3NDAsImV4CI6MTcwOTY1OTM0MH0.xLGvIWN7fzfLPJCNB_5LMbDmJppr4n_vBbQuTXL9LRk";
-const rowContainer = document.getElementById('card-container');
-
-async function fetchData(url) {
-    try {
-        const response = await fetch(url, {
-            headers: {
-                'Authorization': key
-            }
-        });
-
-        if (!response.ok) {
-            const errorMessage = await response.text();
-            throw new Error(`Errore HTTP! Stato: ${response.status}, Messaggio: ${errorMessage}`);
-        }
-
-        const responseData = await response.json();
-        console.log(responseData);
-    } catch (error) {
-        console.error("Errore durante la richiesta GET:", error);
-        throw error;
+const key = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ2NjgyN2EzM2ZjOTAwMTk2NTg1NjYiLCJpYXQiOjE3MDg1NTAxODMsImV4cCI6MTcwOTc1OTc4M30.JcSkmZkbzYeZAt90Q2nqEHt8Qu28GHsXQHvZF4JeFa4";
+const rowContainer =document.getElementById('card-container');
+fetch(apiUrl, {
+  method: 'GET',
+  headers: {
+    'Authorization': key,
+    'Content-Type': 'application/json'
+  }
+})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-}
+    return response.json();
+  })
+  .then(data => {
+    console.log(data);
+    data.forEach(product => {
+      createCard(product);
+    });
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 
-async function renderData() {
-    try {
-        const products = await fetchData(apiUrl);
-        products.forEach(product => {
-            createCard(product);
-        });
-    } catch (error) {
-        console.error("Errore durante la richiesta GET:", error);
-    }
-}
 
 
-function createCard(product, showButtons) {
+
+function createCard(product) {
     const rowDiv = document.createElement('div');
     rowDiv.classList.add('book-item', 'bg-dark', 'text-light', 'card', 'col-6', 'col-md-4', 'col-lg-3', 'm-1', 'p-2', 'shadow-lg');
     rowDiv.style.width = '15rem';
@@ -54,7 +46,7 @@ function createCard(product, showButtons) {
 
     const cardBrand = document.createElement('p');
     cardBrand.classList.add('card-text');
-    cardBrand.textContent = product.brand;
+    cardBrand.textContent = 'Brand'+ product.brand;
 
     const cardPrice = document.createElement('p');
     cardPrice.classList.add('card-text');
@@ -71,3 +63,4 @@ function createCard(product, showButtons) {
     rowDiv.appendChild(card);
     rowContainer.appendChild(rowDiv);
 }
+//aggiungere sezione dettagli 
