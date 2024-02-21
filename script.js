@@ -51,7 +51,7 @@ async function fetchData(url) {
 }
 
 // Funzione per creare la card di un prodotto e aggiungerla 
-function CreateCard(product) {
+function createCard(product) {
     const cardContainer = document.getElementById('card-container');
 
     const rowDiv = document.createElement('div');
@@ -97,11 +97,11 @@ function CreateCard(product) {
 }
 
 // Funzione per rendere visibili i prodotti
-async function renderProducts() {
+async function renderdata() {
     try {
         const products = await fetchData(apiUrl);
         products.forEach(product => {
-            CreateCard(product);
+            createCard(product);
         });
     } catch (error) {
         console.error("Errore durante la richiesta GET:", error);
@@ -109,10 +109,10 @@ async function renderProducts() {
 }
 
 // Chiamata alla funzione per rendere visibili i prodotti
-renderProducts();
+renderdata();
 
 // Funzione per generare un nuovo prodotto 
-async function GeneratePost() {
+async function GenerateData() {
     try {
         const newProduct = {
             name: "",
@@ -122,12 +122,12 @@ async function GeneratePost() {
         };
 
         await postData(apiUrl, newProduct);
-        await renderProducts();
+        await renderdata();
     } catch (error) {
         console.error("Errore durante l'inizializzazione:", error);
     }
 }
-GeneratePost();
+GenerateData();
 
 // Funzione per eliminare un prodotto
 async function DeleteData(productId) {
@@ -153,19 +153,17 @@ async function DeleteData(productId) {
     }
 }
 
-// Funzione principale asincrona per eseguire operazioni
-async function main() {
+// Funzione per selelzionare tramite id prodotto da eliminare
+async function idDelete() {
     try {
 
-        // ID dell'elemento da eliminare
-        const elementIdToDelete = ""; // Sostituisci con l'ID dell'elemento da eliminare
+        const IdToDelete = "";
 
-        // Tentativo di eliminare un elemento
-        await DeleteData(elementIdToDelete);
+        await DeleteData(IdToDelete);
     } catch (error) {
         console.error("Errore durante l'esecuzione del main:", error);
     }
 }
 
 // Chiamata alla funzione principale asincrona
-main();
+idDelete();
