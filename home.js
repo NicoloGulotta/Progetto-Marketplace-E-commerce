@@ -57,8 +57,8 @@ function createCard(product) {
   cardPrice.textContent = 'Price: $' + product.price;
 
   const DetailsBtn = document.createElement('a');
-  DetailsBtn.classList.add('btn', 'btn-danger', 'mx-2');
-  DetailsBtn.textContent = 'Dettaglio';
+  DetailsBtn.classList.add('btn', 'btn-success', 'mx-2');
+  DetailsBtn.textContent = 'Mostra dettagli';
   DetailsBtn.href = 'details.html?_id=' + product._id;
   DetailsBtn.addEventListener('click', (event) => {
     event.preventDefault();
