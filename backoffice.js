@@ -1,6 +1,8 @@
 const apiUrl = "https://striveschool-api.herokuapp.com/api/product/";
 const key = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NWQ2NjgyN2EzM2ZjOTAwMTk2NTg1NjYiLCJpYXQiOjE3MDg1NTAxODMsImV4cCI6MTcwOTc1OTc4M30.JcSkmZkbzYeZAt90Q2nqEHt8Qu28GHsXQHvZF4JeFa4";
 const infoBox = document.getElementById('info-container');
+
+
 fetch(apiUrl, {
     method: 'GET',
     headers: {
@@ -41,6 +43,7 @@ async function postData(url, data) {
         }
 
         const responseData = await response.json();
+
         console.log("Nuovo elemento inserito:", responseData);
         return responseData;
     } catch (error) {
@@ -48,6 +51,7 @@ async function postData(url, data) {
         throw error;
     }
 }
+
 document.getElementById('addBtn').addEventListener('click', function () {
     const name = document.getElementById('recipient-name').value;
     const description = document.getElementById('recipient-descriptioin').value;
@@ -62,11 +66,10 @@ document.getElementById('addBtn').addEventListener('click', function () {
         imageUrl: imageUrl,
         price: price
     };
-
     postData(apiUrl, productData)
         .then(responseData => {
-            alert("prodotto aggiunto")
-            console.log("Prodotto aggiunto:", responseData);
+            alert("Prodotto aggiunto con successo!");
+            postData();
         })
         .catch(error => {
             console.error(error.status);
@@ -77,6 +80,7 @@ function createinfo(product) {
     const rowDiv = document.createElement('div');
     rowDiv.classList.add('book-item', 'bg-dark', 'text-light', 'card', 'col-6', 'col-md-4', 'col-lg-3', 'm-1', 'p-2', 'shadow-lg');
     rowDiv.style.width = '15rem';
+
     const cardBody = document.createElement('div');
     cardBody.classList.add('card-body');
 
@@ -86,7 +90,11 @@ function createinfo(product) {
 
     const cardBrand = document.createElement('p');
     cardBrand.classList.add('card-text');
-    cardBrand.textContent = product.brand;
+    cardBrand.textContent = 'Brand: ' + product.brand;
+
+    const cardDesc = document.createElement('p');
+    cardDesc.classList.add('card-text');
+    cardDesc.textContent = product.description;
 
     const cardPrice = document.createElement('p');
     cardPrice.classList.add('card-text');
@@ -97,29 +105,30 @@ function createinfo(product) {
     deleteButton.textContent = 'Cancella';
     deleteButton.addEventListener('click', function () {
         const productId = product._id;
-        handleDelete(productId);
+        postDelete(productId);
     });
 
-    const editButton = document.createElement('button');
-    editButton.classList.add('btn', 'btn-primary');
-    editButton.textContent = 'Modifica';
-    editButton.addEventListener('click', function () {
-        handleEdit(product._id);
+    const editBtn = document.createElement('button');
+    editBtn.classList.add('btn', 'btn-primary');
+    editBtn.textContent = 'Modifica';
+    editBtn.addEventListener('click', function () {
+        console.log(product._id)
+       Editpost();
     });
 
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardBrand);
     cardBody.appendChild(cardPrice);
     cardBody.appendChild(deleteButton);
-    cardBody.appendChild(editButton);
+    cardBody.appendChild(editBtn);
+
     const card = document.createElement('div');
     card.appendChild(cardBody);
     rowDiv.appendChild(card);
     infoBox.appendChild(rowDiv);
 }
 
-function handleDelete(productId) {
-
+function postDelete(productId) {
     fetch(apiUrl + productId, {
         method: 'DELETE',
         headers: {
@@ -135,14 +144,10 @@ function handleDelete(productId) {
         })
         .then(data => {
             console.log('Product deleted:', data);
-      
+            alert("Prodotto eliminato con successo!");
+            // Aggiungi la logica aggiuntiva necessaria dopo aver eliminato un prodotto
         })
         .catch(error => {
             console.error('Errore durante la richiesta DELETE:', error);
         });
 }
-
-function handleEdit(productId) {
-    console.log('Editing with ID:', productId);
-}
-//aggiungere sezione modifica

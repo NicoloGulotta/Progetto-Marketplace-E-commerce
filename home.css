@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(108, 108, 108);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; 
+}
+
+#card-container {
+    flex: 1;
+}
+.card{
+    cursor: pointer;
+    transition: 0.5s linear ;
+}
+.card:hover{
+    transform: scale(1.1);
+}
+footer {
+    margin-top: auto;
+    background-color: #333; 
+    color: #fff; 
+    padding: 10px;
+}
