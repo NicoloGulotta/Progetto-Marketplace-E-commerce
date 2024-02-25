@@ -214,13 +214,16 @@ window.onload = function () {
     }
 
     function Editpost(productId, newData) {
+        console.log("Editing product:", productId, "with data:", newData);
+    
         putData(apiUrl + productId, newData)
             .then(responseData => {
+                console.log("Product edited successfully:", responseData);
                 alert("Prodotto modificato con successo!");
                 // Aggiungi la logica aggiuntiva necessaria dopo aver modificato un prodotto
             })
             .catch(error => {
-                console.error(error.status);
+                console.error("Error during edit:", error);
             });
-    }
+    }    
 };
