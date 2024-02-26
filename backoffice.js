@@ -4,7 +4,6 @@ const infoBox = document.getElementById('info-container');
 let currentProductId;
 
 window.onload = function () {
-
     function populateForm(product) {
         document.getElementById('recipient-name').value = product.name;
         document.getElementById('recipient-description').value = product.description;
@@ -23,6 +22,11 @@ window.onload = function () {
         const newBrand = document.getElementById('recipient-brand').value;
         const newImageUrl = document.getElementById('recipient-imageUrl').value;
         const newPrice = document.getElementById('recipient-price').value;
+
+        if (!newName || !newDescription || !newBrand || !newImageUrl || !newPrice) {
+            alert("Errore: Tutti i campi sono obbligatori per la modifica.");
+            return;
+        }
 
         const updatedProductData = {
             name: newName,
@@ -45,18 +49,18 @@ window.onload = function () {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+                throw new Error(`Errore HTTP! Stato: ${response.status}`);
             }
             return response.json();
         })
         .then(data => {
-            console.log(data);
+            console.log("Risposta API:", data);
             data.forEach(product => {
                 createinfo(product);
             });
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error('Errore:', error);
         });
 
     async function postData(url, data) {
@@ -77,7 +81,7 @@ window.onload = function () {
 
             const responseData = await response.json();
 
-            console.log("Nuovo elemento inserito:", responseData);
+            console.log("Nuovo elemento aggiunto:", responseData);
             return responseData;
         } catch (error) {
             console.error("Errore durante la richiesta POST:", error);
@@ -92,21 +96,25 @@ window.onload = function () {
         const imageUrl = document.getElementById('recipient-imageUrl').value;
         const price = document.getElementById('recipient-price').value;
 
+        if (!name || !description || !brand || !imageUrl || !price) {
+            alert("Errore: Tutti i campi sono obbligatori per l'aggiunta di un nuovo prodotto.");
+            return;
+        }
+
         const productData = {
-            name: name,
-            description: description,
-            brand: brand,
-            imageUrl: imageUrl,
-            price: price
+            name: encodeURIComponent(name),
+            description: encodeURIComponent(description),
+            brand: encodeURIComponent(brand),
+            imageUrl: encodeURIComponent(imageUrl),
+            price: parseFloat(price)
         };
 
         postData(apiUrl, productData)
             .then(responseData => {
                 alert("Prodotto aggiunto con successo!");
-                postData();
             })
             .catch(error => {
-                console.error(error.status);
+                console.error("Errore durante l'aggiunta del prodotto:", error);
             });
     });
 
@@ -178,9 +186,8 @@ window.onload = function () {
                 return response.json();
             })
             .then(data => {
-                console.log('Product deleted:', data);
+                console.log('Prodotto eliminato:', data);
                 alert("Prodotto eliminato con successo!");
-                // Aggiungi la logica aggiuntiva necessaria dopo aver eliminato un prodotto
             })
             .catch(error => {
                 console.error('Errore durante la richiesta DELETE:', error);
@@ -205,7 +212,7 @@ window.onload = function () {
 
             const responseData = await response.json();
 
-            console.log("Elemento modificato:", responseData);
+            console.log("Elemento aggiornato:", responseData);
             return responseData;
         } catch (error) {
             console.error("Errore durante la richiesta PUT:", error);
@@ -214,16 +221,21 @@ window.onload = function () {
     }
 
     function Editpost(productId, newData) {
-        console.log("Editing product:", productId, "with data:", newData);
-    
+        if (!productId) {
+            console.error("Errore: ID prodotto mancante per la modifica.");
+            alert("Errore: ID prodotto mancante per la modifica.");
+            return;
+        }
+
+        console.log("Modifica prodotto:", productId, "con dati:", newData);
+
         putData(apiUrl + productId, newData)
             .then(responseData => {
-                console.log("Product edited successfully:", responseData);
+                console.log("Prodotto modificato con successo:", responseData);
                 alert("Prodotto modificato con successo!");
-                // Aggiungi la logica aggiuntiva necessaria dopo aver modificato un prodotto
             })
             .catch(error => {
-                console.error("Error during edit:", error);
+                console.error("Errore durante la modifica:", error);
             });
-    }    
+    }
 };
